@@ -65,8 +65,8 @@ ingress:
   }
     # kubernetes.io/tls-acme: "true"
   hosts:
-#    - host: chart-example.local
-     - paths:
+     - host: ec2-15-168-229-141.ap-northeast-3.compute.amazonaws.com
+       paths:
         - path: /api/v1/reports
           pathType: ImplementationSpecific
   tls: []
