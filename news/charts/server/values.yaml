@@ -9,7 +9,7 @@ replicaCount: 1
 image:
   repository: jogyoungjun/news
   # This sets the pull policy for images.
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
@@ -59,18 +59,19 @@ service:
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: true
-  className: ""
-  annotations: {
-    kubernetes.io/ingress.class: nginx
-  }
-
-    # kubernetes.io/tls-acme: "true"
+  className: "alb"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/group.name: repick
   hosts:
-#    - host: chart-example.local
-     - paths:
+    - paths:
         - path: /api/v1/news
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
@@ -90,11 +91,11 @@ resources: {}
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
-    path: /
+    path: /api/v1/news/health
     port: http
 readinessProbe:
   httpGet:
-    path: /
+    path: /api/v1/news/health
     port: http
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
