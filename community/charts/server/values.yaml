@@ -137,3 +137,5 @@ env:
     value: jdbc:mysql://community-mysql:3306/repick-community?serverTimezone=Asia/Seoul
   - name: SPRING_DATA_REDIS_HOST
     value: community-redis
+  - name: SPRING_DATA_REDIS_PORT
+    value: 6379
