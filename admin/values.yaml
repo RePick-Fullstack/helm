@@ -1,4 +1,4 @@
-# Default values for server.
+# Default values for front.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -7,7 +7,7 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: jogyoungjun/news
+  repository: jogyoungjun/admin
   # This sets the pull policy for images.
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
@@ -54,7 +54,7 @@ service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 8080
+  port: 80
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -64,14 +64,12 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: repick
+    alb.ingress.kubernetes.io/group.order: '999'
   hosts:
     - paths:
-        - path: /api/v1/news
+        - path: /admin
           pathType: Prefix
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
@@ -91,12 +89,12 @@ resources: {}
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
-    path: /
-    port: 8080
+    path: /admin
+    port: http
 readinessProbe:
   httpGet:
-    path: /
-    port: 8080
+    path: /admin
+    port: http
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
@@ -124,13 +122,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-env:
-  - name: SERVER_PORT
-    value: 8080
-  - name: SPRING_DATASOURCE_USERNAME
-    value: "root"
-  - name: SPRING_DATASOURCE_PASSWORD
-    value: "root_password"
-  - name: SPRING_DATASOURCE_URL
-    value: jdbc:mysql://news-mysql:3306/news?serverTimezone=Asia/Seoul
