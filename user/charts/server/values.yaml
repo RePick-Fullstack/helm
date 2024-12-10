@@ -142,15 +142,15 @@ env:
     value: jdbc:mysql://user-mysql:3306/user?serverTimezone=Asia/Seoul
   - name: KAKAO_CLIENT-ID
     value: 425177266f9081ed665e51bd34048cc9
-  - name: KAKAO_REDIRECT-URL
+  - name: KAKAO_REDIRECT-URI
     value: https://repick.site/api/v1/oauth/kakao/callback
   - name: KAKAO_TOKEN-URL
     value: https://kauth.kakao.com/oauth/token
   - name: NAVER_CLIENT-ID
     value: A_aQx4dtFzTavl7L6lVf
-  - name: NAVER-CLIENT-SECRET
+  - name: NAVER_CLIENT-SECRET
     value: LCXsU5_Skl
-  - name: NAVER_REDIRECT-URL
+  - name: NAVER_REDIRECT-URI
     value: https://repick.site/api/v1/oauth/naver/callback
   - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
     value: kafka-controller-headless.default.svc.cluster.local:9092
