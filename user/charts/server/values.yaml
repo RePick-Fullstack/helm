@@ -64,12 +64,10 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: repick
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:106649504231:certificate/7bf397fb-7baa-4d0c-8a01-e6638bb0d70c
   hosts:
-    - paths:
-        - path: /api/v1/login
-          pathType: Prefix
-        - path: /api/v1/signup
-          pathType: Prefix
+    - host: repick.site
+      paths:
         - path: /api/v1/users
           pathType: Prefix
         - path: /api/v1/admin
@@ -142,3 +140,11 @@ env:
     value: "root_password"
   - name: SPRING_DATASOURCE_URL
     value: jdbc:mysql://user-mysql:3306/user?serverTimezone=Asia/Seoul
+  - name: KAKAO_REDIRECT-URI
+    value: http://k8s-repick-59dd78f5ea-980331128.us-east-1.elb.amazonaws.com/api/v1/oauth/kakao/callback
+  - name: NAVER_REDIRECT-URI
+    value: http://k8s-repick-59dd78f5ea-980331128.us-east-1.elb.amazonaws.com/api/v1/oauth/naver/callback
+  - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+    value: kafka-controller-headless.default.svc.cluster.local:9092
+  - name: JPA_HIBERNATE_DDL-AUTO
+    value: create

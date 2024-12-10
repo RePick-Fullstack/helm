@@ -7,7 +7,7 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: jogyoungjun/community
+  repository: jogyoungjun/chatbotapi
   # This sets the pull policy for images.
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
@@ -64,12 +64,11 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: repick
-    alb.ingress.kubernetes.io/group.order: '2'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:106649504231:certificate/7bf397fb-7baa-4d0c-8a01-e6638bb0d70c
   hosts:
     - host: repick.site
       paths:
-        - path: /api/v1/posts
+        - path: /api/v1/chatbot
           pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
@@ -136,10 +135,4 @@ env:
   - name: SPRING_DATASOURCE_PASSWORD
     value: "root_password"
   - name: SPRING_DATASOURCE_URL
-    value: jdbc:mysql://community-mysql:3306/repick-community?serverTimezone=Asia/Seoul
-  - name: SPRING_DATA_REDIS_HOST
-    value: community-redis
-  - name: SPRING_DATA_REDIS_PORT
-    value: 6379
-  - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
-    value: kafka-controller-headless.default.svc.cluster.local:9092
+    value: jdbc:mysql://chatbotapi-mysql:3306/chatbot?serverTimezone=Asia/Seoul

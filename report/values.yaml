@@ -64,8 +64,10 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: repick
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:106649504231:certificate/7bf397fb-7baa-4d0c-8a01-e6638bb0d70c
   hosts:
-      - paths:
+    - host: repick.site
+      paths:
         - path: /api/v1/reports
           pathType: Prefix
   tls: []

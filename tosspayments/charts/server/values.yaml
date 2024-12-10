@@ -1,4 +1,4 @@
-# Default values for server.
+# Default values for tosspayments.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -7,7 +7,7 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: jogyoungjun/community
+  repository: jogyoungjun/tosspayments
   # This sets the pull policy for images.
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
@@ -54,7 +54,7 @@ service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 8080
+  port: 4000
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -64,17 +64,13 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: repick
-    alb.ingress.kubernetes.io/group.order: '2'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:106649504231:certificate/7bf397fb-7baa-4d0c-8a01-e6638bb0d70c
   hosts:
     - host: repick.site
       paths:
-        - path: /api/v1/posts
+        - path: /api/v1/tosspayments
           pathType: Prefix
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
@@ -95,11 +91,11 @@ resources: {}
 livenessProbe:
   httpGet:
     path: /
-    port: 8080
+    port: http
 readinessProbe:
   httpGet:
     path: /
-    port: 8080
+    port: http
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
@@ -130,16 +126,12 @@ affinity: {}
 
 env:
   - name: SERVER_PORT
-    value: 8080
+    value: 4000
+  - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+    value: kafka-controller-headless.default.svc.cluster.local:9092
   - name: SPRING_DATASOURCE_USERNAME
     value: "root"
   - name: SPRING_DATASOURCE_PASSWORD
     value: "root_password"
   - name: SPRING_DATASOURCE_URL
-    value: jdbc:mysql://community-mysql:3306/repick-community?serverTimezone=Asia/Seoul
-  - name: SPRING_DATA_REDIS_HOST
-    value: community-redis
-  - name: SPRING_DATA_REDIS_PORT
-    value: 6379
-  - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
-    value: kafka-controller-headless.default.svc.cluster.local:9092
+    value: jdbc:mysql://tosspayments-mysql:3306/tosspayments?serverTimezone=Asia/Seoul

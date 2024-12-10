@@ -65,8 +65,10 @@ ingress:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: repick
     alb.ingress.kubernetes.io/group.order: '1'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:106649504231:certificate/7bf397fb-7baa-4d0c-8a01-e6638bb0d70c
   hosts:
-    - paths:
+    - host: repick.site
+      paths:
         - path: /api/v1/posts/*/comments
           pathType: ImplementationSpecific
         - path: /api/v1/posts/*/comments/*
@@ -96,11 +98,11 @@ resources: {}
 livenessProbe:
   httpGet:
     path: /
-    port: http
+    port: 8080
 readinessProbe:
   httpGet:
     path: /
-    port: http
+    port: 8080
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
@@ -140,3 +142,5 @@ env:
     value: jdbc:mysql://comment-mysql:3306/repick-comment?serverTimezone=Asia/Seoul
   - name: SPRING_DATA_REDIS_HOST
     value: comment-redis
+  - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+    value: kafka-controller-headless.default.svc.cluster.local:9092
