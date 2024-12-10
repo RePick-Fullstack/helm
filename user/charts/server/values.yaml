@@ -140,10 +140,18 @@ env:
     value: "root_password"
   - name: SPRING_DATASOURCE_URL
     value: jdbc:mysql://user-mysql:3306/user?serverTimezone=Asia/Seoul
-  - name: KAKAO_REDIRECT-URI
-    value: http://k8s-repick-59dd78f5ea-980331128.us-east-1.elb.amazonaws.com/api/v1/oauth/kakao/callback
-  - name: NAVER_REDIRECT-URI
-    value: http://k8s-repick-59dd78f5ea-980331128.us-east-1.elb.amazonaws.com/api/v1/oauth/naver/callback
+  - name: KAKAO_CLIENT-ID
+    value: 425177266f9081ed665e51bd34048cc9
+  - name: KAKAO_REDIRECT-URL
+    value: https://repick.site/api/v1/oauth/kakao/callback
+  - name: KAKAO_TOKEN-URL
+    value: https://kauth.kakao.com/oauth/token
+  - name: NAVER_CLIENT-ID
+    value: A_aQx4dtFzTavl7L6lVf
+  - name: NAVER-CLIENT-SECRET
+    value: LCXsU5_Skl
+  - name: NAVER_REDIRECT-URL
+    value: https://repick.site/api/v1/oauth/naver/callback
   - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
     value: kafka-controller-headless.default.svc.cluster.local:9092
   - name: JPA_HIBERNATE_DDL-AUTO
