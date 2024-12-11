@@ -87,13 +87,23 @@ resources: {}
 
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
-  httpGet:
-    path: /
-    port: http
+  exec:
+    command:
+      - mysqladmin
+      - ping
+      - -h127.0.0.1
+      - -uroot
+      - -proot_password
 readinessProbe:
-  httpGet:
-    path: /
-    port: http
+  exec:
+    command:
+      - mysql
+      - -h127.0.0.1
+      - -P3306
+      - -uroot
+      - -proot_password
+      - -e
+      - "SELECT 1;"
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
