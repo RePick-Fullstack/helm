@@ -136,3 +136,7 @@ env:
     value: "root_password"
   - name: SPRING_DATASOURCE_URL
     value: jdbc:mysql://news-mysql:3306/news?serverTimezone=Asia/Seoul
+  - name: AWS_ACCESS_KEY
+    value:
+  - name: AWS_SECRET_KEY
+    value:

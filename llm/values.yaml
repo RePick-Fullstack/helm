@@ -1,15 +1,17 @@
-# Default values for server.
+# Default values for report.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-replicaCount: 1
+replicaCount: 2
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: jogyoungjun/chatbotapi
+  repository: jeonghyeran/rp-chat-bot
   # This sets the pull policy for images.
   pullPolicy: Always
+
+
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
@@ -54,11 +56,11 @@ service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 8080
+  port: 8000
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
-  enabled: true
+  enabled: false
   className: "alb"
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -68,37 +70,30 @@ ingress:
   hosts:
     - host: repick.site
       paths:
-        - path: /api/v1/chatbot
+        - path: /api/v1/reports
           pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  requests:
+    cpu: "900m"
+    memory: "5120Mi"
+  limits:
+    cpu: "1400m"
+    memory: "6144Mi"
 
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
-    path: /
-    port: 8080
+    path: /ping
+    port: 8000
 readinessProbe:
   httpGet:
-    path: /
-    port: 8080
+    path: /ping
+    port: 8000
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
@@ -128,13 +123,5 @@ tolerations: []
 affinity: {}
 
 env:
-  - name: SERVER_PORT
-    value: 8080
-  - name: SPRING_DATASOURCE_USERNAME
-    value: "root"
-  - name: SPRING_DATASOURCE_PASSWORD
-    value: "root_password"
-  - name: SPRING_DATASOURCE_URL
-    value: jdbc:mysql://chatbotapi-mysql:3306/chatbot?serverTimezone=Asia/Seoul
-  - name: LLM_URL
-    value: http://llm:8000
+  - name: OPENAI_API_KEY
+    value:

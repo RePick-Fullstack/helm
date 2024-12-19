@@ -7,7 +7,7 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: jogyoungjun/chatbotapi
+  repository: jogyoungjun/realtimechat
   # This sets the pull policy for images.
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
@@ -68,8 +68,9 @@ ingress:
   hosts:
     - host: repick.site
       paths:
-        - path: /api/v1/chatbot
+        - path: /api/v1/chatroom
           pathType: Prefix
+
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -135,6 +136,8 @@ env:
   - name: SPRING_DATASOURCE_PASSWORD
     value: "root_password"
   - name: SPRING_DATASOURCE_URL
-    value: jdbc:mysql://chatbotapi-mysql:3306/chatbot?serverTimezone=Asia/Seoul
-  - name: LLM_URL
-    value: http://llm:8000
+    value: jdbc:mysql://realtimechat-mysql:3306/realtimechat?serverTimezone=Asia/Seoul
+  - name: SPRING_DATA_REDIS_HOST
+    value: realtimechat-redis
+  - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+    value: kafka-controller-headless.default.svc.cluster.local:9092

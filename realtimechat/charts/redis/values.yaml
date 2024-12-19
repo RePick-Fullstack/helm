@@ -1,4 +1,4 @@
-# Default values for server.
+# Default values for mysql.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -7,9 +7,9 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: jogyoungjun/chatbotapi
+  repository: redis
   # This sets the pull policy for images.
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
@@ -54,26 +54,21 @@ service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 8080
+  port: 6379
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
-  enabled: true
-  className: "alb"
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/group.name: repick
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:106649504231:certificate/7bf397fb-7baa-4d0c-8a01-e6638bb0d70c
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: repick.site
+    - host: chart-example.local
       paths:
-        - path: /api/v1/chatbot
-          pathType: Prefix
+        - path: /
+          pathType: ImplementationSpecific
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
@@ -92,13 +87,11 @@ resources: {}
 
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
-  httpGet:
-    path: /
-    port: 8080
+  tcpSocket:
+    port: 6379
 readinessProbe:
-  httpGet:
-    path: /
-    port: 8080
+  tcpSocket:
+    port: 6379
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
@@ -126,15 +119,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-env:
-  - name: SERVER_PORT
-    value: 8080
-  - name: SPRING_DATASOURCE_USERNAME
-    value: "root"
-  - name: SPRING_DATASOURCE_PASSWORD
-    value: "root_password"
-  - name: SPRING_DATASOURCE_URL
-    value: jdbc:mysql://chatbotapi-mysql:3306/chatbot?serverTimezone=Asia/Seoul
-  - name: LLM_URL
-    value: http://llm:8000
